@@ -1,11 +1,11 @@
 from flask import Flask
-from flask_sqlalchemy import SQLACHEMY
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
-db = SQLACHEMY(app)
+db = SQLAlchemy(app)
 
 @app.route('/hello')
 def hello():
