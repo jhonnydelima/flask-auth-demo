@@ -64,5 +64,18 @@ def get_user(user_id):
     return jsonify({"error": "User not found"}), 404
   return jsonify({"message": user.username})
 
+@app.route('/users/<int:user_id>', methods=['PATCH'])
+@login_required
+def update_user_password(user_id):
+  user = User.query.get(user_id)
+  if not user:
+    return jsonify({"error": "User not found"}), 404
+  data = request.get_json()
+  if not data.get('password'):
+    return jsonify({"error": "Password is required"}), 400
+  user.password = data.get('password')
+  db.session.commit()
+  return jsonify({"message": f"User {user_id} updated successfully"})
+
 if __name__ == '__main__':
   app.run(debug=True)
