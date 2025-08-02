@@ -21,7 +21,10 @@ def login():
   if not username or not password:
     return jsonify({"error": "Username and password are required"}), 400
   
-  pass
+  user = User.query.filter_by(username=username).first()
+  if not user or user.password != password:
+    return jsonify({"error": "Invalid username or password"}), 401
+  return jsonify({"message": "Login successful"})
 
 if __name__ == '__main__':
   app.run(debug=True)
