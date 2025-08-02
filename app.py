@@ -87,7 +87,7 @@ def delete_user(user_id):
     return jsonify({"error": "Cannot delete the currently logged-in user"}), 403
   db.session.delete(user)
   db.session.commit()
-  return jsonify({"message": f"User {user_id} deleted successfully"}), 204
+  return jsonify({"message": f"User {user_id} deleted successfully"}), 200
 
 if __name__ == '__main__':
   app.run(debug=True)
