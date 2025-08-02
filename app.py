@@ -77,5 +77,17 @@ def update_user_password(user_id):
   db.session.commit()
   return jsonify({"message": f"User {user_id} updated successfully"})
 
+@app.route('/users/<int:user_id>', methods=['DELETE'])
+@login_required
+def delete_user(user_id):
+  user = User.query.get(user_id)
+  if not user:
+    return jsonify({"error": "User not found"}), 404
+  if user_id == current_user.id:
+    return jsonify({"error": "Cannot delete the currently logged-in user"}), 403
+  db.session.delete(user)
+  db.session.commit()
+  return jsonify({"message": f"User {user_id} deleted successfully"}), 204
+
 if __name__ == '__main__':
   app.run(debug=True)
