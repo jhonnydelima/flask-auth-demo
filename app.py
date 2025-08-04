@@ -67,6 +67,8 @@ def get_user(user_id):
 @app.route('/users/<int:user_id>', methods=['PATCH'])
 @login_required
 def update_user_password(user_id):
+  if user_id != current_user.id and current_user.role != 'admin':
+    return jsonify({"error": "Permission denied"}), 403
   user = User.query.get(user_id)
   if not user:
     return jsonify({"error": "User not found"}), 404
@@ -80,11 +82,13 @@ def update_user_password(user_id):
 @app.route('/users/<int:user_id>', methods=['DELETE'])
 @login_required
 def delete_user(user_id):
+  if current_user.role != 'admin':
+    return jsonify({"error": "Permission denied"}), 403
+  if user_id == current_user.id:
+    return jsonify({"error": "Cannot delete the currently logged-in user"}), 403
   user = User.query.get(user_id)
   if not user:
     return jsonify({"error": "User not found"}), 404
-  if user_id == current_user.id:
-    return jsonify({"error": "Cannot delete the currently logged-in user"}), 403
   db.session.delete(user)
   db.session.commit()
   return jsonify({"message": f"User {user_id} deleted successfully"}), 200
