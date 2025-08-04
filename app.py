@@ -51,7 +51,7 @@ def create_user():
   if User.query.filter_by(username=username).first():
     return jsonify({"error": "User already exists"}), 409
   
-  user = User(username=username, password=password)
+  user = User(username=username, password=password, role='user')
   db.session.add(user)
   db.session.commit()
   return jsonify({"message": "User created successfully"}), 201
